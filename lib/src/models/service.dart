@@ -26,39 +26,11 @@ class ServiceItem {
     );
   }
 
-  factory ServiceItem.empty() {
-    return const ServiceItem(
-      id: '',
-      name: '',
-      category: '',
-      price: 0,
-      status: 'draft',
-    );
-  }
-
-  ServiceItem copyWith({
-    String? id,
-    String? name,
-    String? category,
-    double? price,
-    String? status,
-    String? imageUrl,
-  }) {
-    return ServiceItem(
-      id: id ?? this.id,
-      name: name ?? this.name,
-      category: category ?? this.category,
-      price: price ?? this.price,
-      status: status ?? this.status,
-      imageUrl: imageUrl ?? this.imageUrl,
-    );
-  }
-
   Map<String, dynamic> toJson() => {
-        'name': name,
-        'category': category,
-        'price': price,
-        'status': status,
-        if (imageUrl != null && imageUrl!.isNotEmpty) 'image_url': imageUrl,
-      };
+    'name': name,
+    'category': category,
+    'price': price,
+    'status': status,
+    if (imageUrl != null) 'image_url': imageUrl,
+  };
 }

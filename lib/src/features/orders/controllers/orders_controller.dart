@@ -1,7 +1,6 @@
-import 'package:dio/dio.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_riverpod/legacy.dart';
 
-import '../../../core/offline_queue.dart';
 import '../../../models/order.dart';
 import '../../../providers/service_providers.dart';
 
@@ -25,35 +24,12 @@ class OrdersController extends StateNotifier<AsyncValue<List<OrderItem>>> {
 
   Future<void> updateOrder(String id, String status) async {
     final vendorService = _ref.read(vendorServiceProvider);
-    final queue = _ref.read(offlineQueueProvider);
-    try {
-      await vendorService.updateOrderStatus(id, status);
-      await load();
-    } catch (error, stackTrace) {
-      if (_shouldQueue(error)) {
-        await queue.enqueue(OfflineAction.orderStatus(orderId: id, status: status));
-        state = state.whenData((orders) {
-          return orders.map((order) => order.id == id ? order.copyWith(status: status) : order).toList();
-        });
-      } else {
-        state = AsyncValue.error(error, stackTrace);
-      }
-    }
-  }
-
-  bool _shouldQueue(Object error) {
-    if (error is DioException) {
-      return error.type == DioExceptionType.connectionTimeout ||
-          error.type == DioExceptionType.connectionError ||
-          error.type == DioExceptionType.receiveTimeout ||
-          error.type == DioExceptionType.sendTimeout ||
-          (error.response?.statusCode != null && error.response!.statusCode! >= 500);
-    }
-    return false;
+    await vendorService.updateOrderStatus(id, status);
+    await load();
   }
 }
 
 final ordersControllerProvider =
     StateNotifierProvider<OrdersController, AsyncValue<List<OrderItem>>>((ref) {
-  return OrdersController(ref);
-});
+      return OrdersController(ref);
+    });

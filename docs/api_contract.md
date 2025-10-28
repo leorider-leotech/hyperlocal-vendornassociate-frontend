@@ -43,19 +43,6 @@ Response:
 ### GET /vendors/me
 Returns vendor profile, subscription, and KPI stats.
 
-### PUT /vendors/me
-Updates onboarding, business profile, and payout details. Example payload:
-
-```json
-{
-  "business_name": "Metro Fresh",
-  "category": "Groceries",
-  "address": "MG Road, Bengaluru",
-  "gstin": "22AAAAA0000A1Z5",
-  "pan": "AAAAA0000A"
-}
-```
-
 ## Services
 
 - `GET /vendors/services`

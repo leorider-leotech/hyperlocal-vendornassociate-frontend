@@ -1,15 +1,14 @@
-import 'package:dio/dio.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_riverpod/legacy.dart';
 
-import '../../../core/api_service.dart';
-import '../../../core/auth_service.dart';
 import '../../../models/auth_tokens.dart';
 import '../../../providers/service_providers.dart';
+import '../../../services/api_service.dart';
+import '../../../services/auth_service.dart';
 import '../models/auth_state.dart';
 
 class AuthController extends StateNotifier<AuthState> {
-  AuthController(this._ref)
-      : super(AuthState.initial()) {
+  AuthController(this._ref) : super(AuthState.initial()) {
     Future.microtask(initialize);
   }
 
@@ -24,18 +23,21 @@ class AuthController extends StateNotifier<AuthState> {
     if (tokens?.isValid == true) {
       await _restoreSession();
     } else {
-      state = state.copyWith(status: AuthStatus.unauthenticated, resetError: true);
+      state = state.copyWith(
+        status: AuthStatus.unauthenticated,
+        resetError: true,
+      );
     }
   }
 
-  Future<void> login(String identifier) async {
+  Future<void> requestOtp(String phone) async {
     state = state.copyWith(isLoading: true, resetError: true);
     try {
-      await _authService.login(identifier: identifier);
+      await _authService.requestOtp(phone: phone);
       state = state.copyWith(
         status: AuthStatus.otpRequested,
         isLoading: false,
-        identifier: identifier,
+        phone: phone,
         resetError: true,
       );
     } catch (error) {
@@ -49,28 +51,10 @@ class AuthController extends StateNotifier<AuthState> {
   Future<void> verifyOtp(String otp) async {
     state = state.copyWith(isLoading: true, resetError: true);
     try {
-      final vendor = await _authService.verifyOtp(identifier: state.identifier, otp: otp);
+      final vendor = await _authService.verifyOtp(phone: state.phone, otp: otp);
       state = state.copyWith(
-        status: vendor.onboardingComplete ? AuthStatus.authenticated : AuthStatus.onboarding,
-        vendor: vendor,
-        isLoading: false,
-        resetError: true,
-      );
-    } catch (error) {
-      state = state.copyWith(
-        isLoading: false,
-        errorMessage: _describeError(error),
-      );
-    }
-  }
-
-  Future<void> completeOnboarding(Map<String, dynamic> payload) async {
-    state = state.copyWith(isLoading: true, resetError: true);
-    try {
-      final vendor = await _authService.completeOnboarding(payload);
-      state = state.copyWith(
-        vendor: vendor,
         status: AuthStatus.authenticated,
+        vendor: vendor,
         isLoading: false,
         resetError: true,
       );
@@ -79,15 +63,6 @@ class AuthController extends StateNotifier<AuthState> {
         isLoading: false,
         errorMessage: _describeError(error),
       );
-    }
-  }
-
-  Future<void> refreshVendor() async {
-    try {
-      final vendor = await _authService.fetchMe();
-      state = state.copyWith(vendor: vendor, status: AuthStatus.authenticated, resetError: true);
-    } catch (error) {
-      state = state.copyWith(errorMessage: _describeError(error));
     }
   }
 
@@ -96,7 +71,7 @@ class AuthController extends StateNotifier<AuthState> {
     state = state.copyWith(
       status: AuthStatus.unauthenticated,
       vendor: null,
-      identifier: '',
+      phone: '',
       resetError: true,
     );
   }
@@ -106,14 +81,18 @@ class AuthController extends StateNotifier<AuthState> {
     try {
       final vendor = await _authService.fetchMe();
       state = state.copyWith(
-        status: vendor.onboardingComplete ? AuthStatus.authenticated : AuthStatus.onboarding,
+        status: AuthStatus.authenticated,
         vendor: vendor,
         isLoading: false,
         resetError: true,
       );
     } catch (_) {
       await _apiService.clearTokens();
-      state = state.copyWith(status: AuthStatus.unauthenticated, isLoading: false, resetError: true);
+      state = state.copyWith(
+        status: AuthStatus.unauthenticated,
+        isLoading: false,
+        resetError: true,
+      );
     }
   }
 
@@ -122,16 +101,6 @@ class AuthController extends StateNotifier<AuthState> {
   }
 
   String _describeError(Object error) {
-    if (error is ApiException) {
-      return error.message;
-    }
-    if (error is DioException) {
-      final inner = error.error;
-      if (inner is ApiException) {
-        return inner.message;
-      }
-      return error.message ?? 'Network error';
-    }
     if (error is Exception) {
       return error.toString();
     }
@@ -139,6 +108,8 @@ class AuthController extends StateNotifier<AuthState> {
   }
 }
 
-final authControllerProvider = StateNotifierProvider<AuthController, AuthState>((ref) {
-  return AuthController(ref);
-});
+final authControllerProvider = StateNotifierProvider<AuthController, AuthState>(
+  (ref) {
+    return AuthController(ref);
+  },
+);

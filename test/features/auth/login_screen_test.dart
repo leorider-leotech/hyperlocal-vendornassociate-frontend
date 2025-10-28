@@ -4,23 +4,26 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'package:appydex_vendor/src/features/auth/controllers/auth_controller.dart';
 import 'package:appydex_vendor/src/features/auth/models/auth_state.dart';
-import 'package:appydex_vendor/src/screens/auth/login.dart';
+import 'package:appydex_vendor/src/features/auth/screens/login_screen.dart';
 
 class _FakeAuthController extends AuthController {
-  _FakeAuthController(Ref ref)
-      : super(ref) {
+  _FakeAuthController(super.ref) {
     state = const AuthState(status: AuthStatus.unauthenticated);
   }
 
-  String? lastIdentifier;
+  String? lastPhone;
 
   @override
   Future<void> initialize() async {}
 
   @override
-  Future<void> login(String identifier) async {
-    lastIdentifier = identifier;
-    state = state.copyWith(status: AuthStatus.otpRequested, identifier: identifier, isLoading: false);
+  Future<void> requestOtp(String phone) async {
+    lastPhone = phone;
+    state = state.copyWith(
+      status: AuthStatus.otpRequested,
+      phone: phone,
+      isLoading: false,
+    );
   }
 }
 
@@ -39,10 +42,10 @@ void main() {
       ),
     );
 
-    await tester.enterText(find.byType(TextFormField), 'vendor@example.com');
+    await tester.enterText(find.byType(TextFormField), '9876543210');
     await tester.tap(find.text('Send OTP'));
     await tester.pump();
 
-    expect(controller.lastIdentifier, 'vendor@example.com');
+    expect(controller.lastPhone, '+919876543210');
   });
 }

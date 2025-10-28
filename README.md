@@ -10,28 +10,24 @@ Production-ready Flutter frontend for the Appydex hyperlocal vendor platform. Th
 - Leads and orders boards with status transitions and retry-friendly actions.
 - Subscription, referral, and profile surfaces ready for payment gateway wiring.
 - Firebase messaging, Sentry crash reporting, and offline-safe storage fallbacks.
-- Offline queue for lead/order critical actions with automatic retry when connectivity is restored.
 
 ## Project structure
 
 ```
 lib/
   src/
-    app.dart            # Root MaterialApp router shell
-    core/               # bootstrap, API client, secure storage, notifications
-    features/           # State controllers and domain logic
-    models/             # JSON models
-    providers/          # Riverpod providers and overrides
-    screens/            # Routed UI surfaces (auth, dashboard, services, leads, etc.)
-    services/           # Vendor API bindings and storage abstractions
-    utils/              # Validators and shared helpers
-    widgets/            # Reusable presentation widgets (KPI cards, service cards)
+    core/        # bootstrap, theme
+    features/    # feature-specific screens/controllers
+    models/      # data models
+    providers/   # service and global providers
+    services/    # API, auth, vendor, secure storage wrappers
+    utils/       # shared helpers
 ```
 
 ## Getting started
 
 1. Install Flutter 3.22+ (`flutter --version`).
-2. Copy environment template and fill credentials (set `FAKE_PAY=true` to use the mock payment flow):
+2. Copy environment template and fill credentials:
    ```bash
    cp .env.example .env
    ```
@@ -69,7 +65,6 @@ CI runs `flutter analyze`, `flutter test`, and builds Android APK plus Web bundl
 ## Additional docs
 
 - [API Contract](docs/api_contract.md)
-- [Release Checklist](docs/release_checklist.md)
 
 ## CI
 

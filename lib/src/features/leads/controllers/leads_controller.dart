@@ -1,15 +1,11 @@
-import 'package:dio/dio.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_riverpod/legacy.dart';
 
-import '../../../core/offline_queue.dart';
 import '../../../models/lead.dart';
 import '../../../providers/service_providers.dart';
 
 class LeadsState {
-  const LeadsState({
-    required this.status,
-    required this.leads,
-  });
+  const LeadsState({required this.status, required this.leads});
 
   final String status;
   final AsyncValue<List<LeadItem>> leads;
@@ -24,7 +20,7 @@ class LeadsState {
 
 class LeadsController extends StateNotifier<LeadsState> {
   LeadsController(this._ref)
-      : super(LeadsState(status: 'new', leads: const AsyncValue.loading())) {
+    : super(LeadsState(status: 'new', leads: const AsyncValue.loading())) {
     load();
   }
 
@@ -48,37 +44,12 @@ class LeadsController extends StateNotifier<LeadsState> {
 
   Future<void> updateLead(String id, String status) async {
     final vendorService = _ref.read(vendorServiceProvider);
-    final queue = _ref.read(offlineQueueProvider);
-    try {
-      await vendorService.updateLeadStatus(id, status);
-      await load();
-    } catch (error, stackTrace) {
-      if (_shouldQueue(error)) {
-        await queue.enqueue(OfflineAction.leadStatus(leadId: id, status: status));
-        state = state.copyWith(
-          leads: state.leads.whenData((leads) {
-            return leads
-                .map((lead) => lead.id == id ? lead.copyWith(status: status) : lead)
-                .toList();
-          }),
-        );
-      } else {
-        state = state.copyWith(leads: AsyncValue.error(error, stackTrace));
-      }
-    }
-  }
-
-  bool _shouldQueue(Object error) {
-    if (error is DioException) {
-      return error.type == DioExceptionType.connectionTimeout ||
-          error.type == DioExceptionType.connectionError ||
-          error.type == DioExceptionType.receiveTimeout ||
-          error.type == DioExceptionType.sendTimeout ||
-          (error.response?.statusCode != null && error.response!.statusCode! >= 500);
-    }
-    return false;
+    await vendorService.updateLeadStatus(id, status);
+    await load();
   }
 }
 
 final leadsControllerProvider =
-    StateNotifierProvider<LeadsController, LeadsState>((ref) => LeadsController(ref));
+    StateNotifierProvider<LeadsController, LeadsState>(
+      (ref) => LeadsController(ref),
+    );
