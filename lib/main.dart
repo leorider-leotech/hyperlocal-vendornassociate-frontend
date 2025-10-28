@@ -77,23 +77,21 @@ class _VendorDashboardState extends State<VendorDashboard> {
     return Scaffold(
       appBar: AppBar(
         title: Text(destination.label),
-        actions: const [
-          _NotificationButton(),
-          _HelpButton(),
-        ],
+        actions: const [_NotificationButton(), _HelpButton()],
       ),
       drawer: _VendorDrawer(
         destinations: _destinations,
         selectedIndex: _selectedIndex,
         onDestinationSelected: _onDestinationSelected,
       ),
-      floatingActionButton: _selectedIndex == 2
-          ? FloatingActionButton.extended(
-              onPressed: () {},
-              icon: const Icon(Icons.add_circle_outline),
-              label: const Text('New Product'),
-            )
-          : null,
+      floatingActionButton:
+          _selectedIndex == 2
+              ? FloatingActionButton.extended(
+                onPressed: () {},
+                icon: const Icon(Icons.add_circle_outline),
+                label: const Text('New Product'),
+              )
+              : null,
       body: LayoutBuilder(
         builder: (context, constraints) {
           final isWide = constraints.maxWidth >= 900;
@@ -108,21 +106,21 @@ class _VendorDashboardState extends State<VendorDashboard> {
                     padding: const EdgeInsets.symmetric(vertical: 24),
                     child: CircleAvatar(
                       radius: 24,
-                      backgroundColor: Theme.of(context)
-                          .colorScheme
-                          .primary
-                          .withOpacity(.12),
+                      backgroundColor: Theme.of(
+                        context,
+                      ).colorScheme.primary.withOpacity(.12),
                       child: const Icon(Icons.storefront_outlined),
                     ),
                   ),
-                  destinations: _destinations
-                      .map(
-                        (destination) => NavigationRailDestination(
-                          icon: Icon(destination.icon),
-                          label: Text(destination.label),
-                        ),
-                      )
-                      .toList(),
+                  destinations:
+                      _destinations
+                          .map(
+                            (destination) => NavigationRailDestination(
+                              icon: Icon(destination.icon),
+                              label: Text(destination.label),
+                            ),
+                          )
+                          .toList(),
                 ),
               Expanded(
                 child: AnimatedSwitcher(
@@ -136,20 +134,22 @@ class _VendorDashboardState extends State<VendorDashboard> {
           );
         },
       ),
-      bottomNavigationBar: MediaQuery.of(context).size.width < 900
-          ? NavigationBar(
-              selectedIndex: _selectedIndex,
-              onDestinationSelected: _onDestinationSelected,
-              destinations: _destinations
-                  .map(
-                    (destination) => NavigationDestination(
-                      icon: Icon(destination.icon),
-                      label: destination.label,
-                    ),
-                  )
-                  .toList(),
-            )
-          : null,
+      bottomNavigationBar:
+          MediaQuery.of(context).size.width < 900
+              ? NavigationBar(
+                selectedIndex: _selectedIndex,
+                onDestinationSelected: _onDestinationSelected,
+                destinations:
+                    _destinations
+                        .map(
+                          (destination) => NavigationDestination(
+                            icon: Icon(destination.icon),
+                            label: destination.label,
+                          ),
+                        )
+                        .toList(),
+              )
+              : null,
     );
   }
 }
@@ -214,9 +214,8 @@ class OverviewPage extends StatelessWidget {
           Wrap(
             spacing: 16,
             runSpacing: 16,
-            children: metrics
-                .map((metric) => _MetricCard(metric: metric))
-                .toList(),
+            children:
+                metrics.map((metric) => _MetricCard(metric: metric)).toList(),
           ),
           const SizedBox(height: 24),
           LayoutBuilder(
@@ -236,19 +235,19 @@ class OverviewPage extends StatelessWidget {
                           children: [
                             Text(
                               'Fulfilment Slots',
-                              style: theme.textTheme.titleLarge
-                                  ?.copyWith(fontWeight: FontWeight.w600),
+                              style: theme.textTheme.titleLarge?.copyWith(
+                                fontWeight: FontWeight.w600,
+                              ),
                             ),
                             const SizedBox(height: 16),
-                            ...fulfilmentSlots
-                                .map(
-                                  (slot) => Padding(
-                                    padding:
-                                        const EdgeInsets.symmetric(vertical: 12),
-                                    child: _CapacityProgress(slot: slot),
-                                  ),
-                                )
-                                .toList(),
+                            ...fulfilmentSlots.map(
+                              (slot) => Padding(
+                                padding: const EdgeInsets.symmetric(
+                                  vertical: 12,
+                                ),
+                                child: _CapacityProgress(slot: slot),
+                              ),
+                            ),
                           ],
                         ),
                       ),
@@ -265,32 +264,29 @@ class OverviewPage extends StatelessWidget {
                           children: [
                             Text(
                               'Actionable Insights',
-                              style: theme.textTheme.titleLarge
-                                  ?.copyWith(fontWeight: FontWeight.w600),
+                              style: theme.textTheme.titleLarge?.copyWith(
+                                fontWeight: FontWeight.w600,
+                              ),
                             ),
                             const SizedBox(height: 16),
-                            ...insights
-                                .map(
-                                  (insight) => ListTile(
-                                    contentPadding: EdgeInsets.zero,
-                                    leading: CircleAvatar(
-                                      backgroundColor: theme
-                                          .colorScheme
-                                          .primary
-                                          .withOpacity(0.12),
-                                      child: Icon(
-                                        Icons.auto_awesome,
-                                        color: theme.colorScheme.primary,
-                                      ),
-                                    ),
-                                    title: Text(
-                                      insight.title,
-                                      style: theme.textTheme.titleMedium,
-                                    ),
-                                    subtitle: Text(insight.description),
+                            ...insights.map(
+                              (insight) => ListTile(
+                                contentPadding: EdgeInsets.zero,
+                                leading: CircleAvatar(
+                                  backgroundColor: theme.colorScheme.primary
+                                      .withOpacity(0.12),
+                                  child: Icon(
+                                    Icons.auto_awesome,
+                                    color: theme.colorScheme.primary,
                                   ),
-                                )
-                                .toList(),
+                                ),
+                                title: Text(
+                                  insight.title,
+                                  style: theme.textTheme.titleMedium,
+                                ),
+                                subtitle: Text(insight.description),
+                              ),
+                            ),
                           ],
                         ),
                       ),
@@ -310,14 +306,38 @@ class OrdersPage extends StatelessWidget {
   const OrdersPage({super.key});
 
   static final List<_Order> _orders = [
-    _Order('#HGX-1021', '12 Sep · 08:45 am', 'Ready for dispatch', 524.80,
-        Icons.check_circle, Color(0xFF22B07D)),
-    _Order('#HGX-1018', '12 Sep · 08:12 am', 'Packing · ETA 12 mins', 316.45,
-        Icons.local_shipping_outlined, Color(0xFF0C8CE9)),
-    _Order('#HGX-1012', '12 Sep · 07:55 am', 'Awaiting rider', 742.10,
-        Icons.pending_actions_outlined, Color(0xFFF59E0B)),
-    _Order('#HGX-1009', '12 Sep · 07:42 am', 'Delivered · 4.9★ feedback',
-        279.30, Icons.star_rate_rounded, Color(0xFF6D39FF)),
+    _Order(
+      '#HGX-1021',
+      '12 Sep · 08:45 am',
+      'Ready for dispatch',
+      524.80,
+      Icons.check_circle,
+      Color(0xFF22B07D),
+    ),
+    _Order(
+      '#HGX-1018',
+      '12 Sep · 08:12 am',
+      'Packing · ETA 12 mins',
+      316.45,
+      Icons.local_shipping_outlined,
+      Color(0xFF0C8CE9),
+    ),
+    _Order(
+      '#HGX-1012',
+      '12 Sep · 07:55 am',
+      'Awaiting rider',
+      742.10,
+      Icons.pending_actions_outlined,
+      Color(0xFFF59E0B),
+    ),
+    _Order(
+      '#HGX-1009',
+      '12 Sep · 07:42 am',
+      'Delivered · 4.9★ feedback',
+      279.30,
+      Icons.star_rate_rounded,
+      Color(0xFF6D39FF),
+    ),
   ];
 
   @override
@@ -337,7 +357,7 @@ class OrdersPage extends StatelessWidget {
           ],
         ),
         const SizedBox(height: 16),
-        ..._orders.map((order) => _OrderCard(order: order)).toList(),
+        ..._orders.map((order) => _OrderCard(order: order)),
       ],
     );
   }
@@ -369,8 +389,9 @@ class InventoryPage extends StatelessWidget {
             children: [
               Text(
                 'Inventory Coverage',
-                style:
-                    theme.textTheme.titleLarge?.copyWith(fontWeight: FontWeight.w600),
+                style: theme.textTheme.titleLarge?.copyWith(
+                  fontWeight: FontWeight.w600,
+                ),
               ),
               const SizedBox(height: 16),
               DataTable(
@@ -381,31 +402,37 @@ class InventoryPage extends StatelessWidget {
                   DataColumn(label: Text('Sold today')),
                   DataColumn(label: Text('Auto-replenish')),
                 ],
-                rows: _inventory
-                    .map(
-                      (item) => DataRow(
-                        cells: [
-                          DataCell(Text(item.name)),
-                          DataCell(Text(item.category)),
-                          DataCell(Text(item.inStock.toString())),
-                          DataCell(Text(item.todaySales.toString())),
-                          DataCell(
-                            Chip(
-                              label: Text(item.autoReplenish ? 'Enabled' : 'Paused'),
-                              backgroundColor: item.autoReplenish
-                                  ? theme.colorScheme.primary.withOpacity(0.1)
-                                  : Colors.grey.withOpacity(0.15),
-                              labelStyle: TextStyle(
-                                color: item.autoReplenish
-                                    ? theme.colorScheme.primary
-                                    : Colors.grey.shade700,
+                rows:
+                    _inventory
+                        .map(
+                          (item) => DataRow(
+                            cells: [
+                              DataCell(Text(item.name)),
+                              DataCell(Text(item.category)),
+                              DataCell(Text(item.inStock.toString())),
+                              DataCell(Text(item.todaySales.toString())),
+                              DataCell(
+                                Chip(
+                                  label: Text(
+                                    item.autoReplenish ? 'Enabled' : 'Paused',
+                                  ),
+                                  backgroundColor:
+                                      item.autoReplenish
+                                          ? theme.colorScheme.primary
+                                              .withOpacity(0.1)
+                                          : Colors.grey.withOpacity(0.15),
+                                  labelStyle: TextStyle(
+                                    color:
+                                        item.autoReplenish
+                                            ? theme.colorScheme.primary
+                                            : Colors.grey.shade700,
+                                  ),
+                                ),
                               ),
-                            ),
+                            ],
                           ),
-                        ],
-                      ),
-                    )
-                    .toList(),
+                        )
+                        .toList(),
               ),
             ],
           ),
@@ -436,8 +463,9 @@ class SupportPage extends StatelessWidget {
                 children: [
                   Text(
                     'Need help? We\'re here 24/7',
-                    style: theme.textTheme.titleLarge
-                        ?.copyWith(fontWeight: FontWeight.w600),
+                    style: theme.textTheme.titleLarge?.copyWith(
+                      fontWeight: FontWeight.w600,
+                    ),
                   ),
                   const SizedBox(height: 12),
                   Text(
@@ -476,8 +504,9 @@ class SupportPage extends StatelessWidget {
                 children: [
                   Text(
                     'Operational Checklist',
-                    style: theme.textTheme.titleLarge
-                        ?.copyWith(fontWeight: FontWeight.w600),
+                    style: theme.textTheme.titleLarge?.copyWith(
+                      fontWeight: FontWeight.w600,
+                    ),
                   ),
                   const SizedBox(height: 8),
                   const _ChecklistTile(
@@ -548,7 +577,14 @@ class _Insights {
 }
 
 class _Order {
-  const _Order(this.id, this.time, this.status, this.amount, this.icon, this.color);
+  const _Order(
+    this.id,
+    this.time,
+    this.status,
+    this.amount,
+    this.icon,
+    this.color,
+  );
 
   final String id;
   final String time;
@@ -560,7 +596,12 @@ class _Order {
 
 class _InventoryItem {
   const _InventoryItem(
-      this.name, this.category, this.inStock, this.todaySales, this.autoReplenish);
+    this.name,
+    this.category,
+    this.inStock,
+    this.todaySales,
+    this.autoReplenish,
+  );
 
   final String name;
   final String category;
@@ -594,8 +635,9 @@ class _MetricCard extends StatelessWidget {
               const SizedBox(height: 16),
               Text(
                 metric.title,
-                style: theme.textTheme.titleMedium
-                    ?.copyWith(fontWeight: FontWeight.w600),
+                style: theme.textTheme.titleMedium?.copyWith(
+                  fontWeight: FontWeight.w600,
+                ),
               ),
               const SizedBox(height: 8),
               Text(
@@ -606,10 +648,7 @@ class _MetricCard extends StatelessWidget {
                 ),
               ),
               const SizedBox(height: 8),
-              Text(
-                metric.change,
-                style: theme.textTheme.bodyMedium,
-              ),
+              Text(metric.change, style: theme.textTheme.bodyMedium),
             ],
           ),
         ),
@@ -633,10 +672,7 @@ class _CapacityProgress extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(
-                slot.label,
-                style: theme.textTheme.titleMedium,
-              ),
+              Text(slot.label, style: theme.textTheme.titleMedium),
               const SizedBox(height: 8),
               ClipRRect(
                 borderRadius: BorderRadius.circular(8),
@@ -650,7 +686,7 @@ class _CapacityProgress extends StatelessWidget {
           ),
         ),
         const SizedBox(width: 16),
-        Text('${slot.currentCapacity}/${slot.maxCapacity}')
+        Text('${slot.currentCapacity}/${slot.maxCapacity}'),
       ],
     );
   }
@@ -685,8 +721,9 @@ class _OrderCard extends StatelessWidget {
                     children: [
                       Text(
                         order.id,
-                        style: theme.textTheme.titleMedium
-                            ?.copyWith(fontWeight: FontWeight.w600),
+                        style: theme.textTheme.titleMedium?.copyWith(
+                          fontWeight: FontWeight.w600,
+                        ),
                       ),
                       const Spacer(),
                       Text(
@@ -696,15 +733,13 @@ class _OrderCard extends StatelessWidget {
                     ],
                   ),
                   const SizedBox(height: 8),
-                  Text(
-                    order.status,
-                    style: theme.textTheme.bodyMedium,
-                  ),
+                  Text(order.status, style: theme.textTheme.bodyMedium),
                   const SizedBox(height: 4),
                   Text(
                     order.time,
-                    style: theme.textTheme.labelMedium
-                        ?.copyWith(color: Colors.grey.shade600),
+                    style: theme.textTheme.labelMedium?.copyWith(
+                      color: Colors.grey.shade600,
+                    ),
                   ),
                 ],
               ),
@@ -723,10 +758,7 @@ class _OrderCard extends StatelessWidget {
 }
 
 class _OrderFilterChip extends StatelessWidget {
-  const _OrderFilterChip({
-    required this.label,
-    this.selected = false,
-  });
+  const _OrderFilterChip({required this.label, this.selected = false});
 
   final String label;
   final bool selected;
@@ -808,7 +840,7 @@ class _NotificationButton extends StatelessWidget {
                 shape: BoxShape.circle,
               ),
             ),
-          )
+          ),
         ],
       ),
     );
@@ -888,10 +920,13 @@ class _VendorDrawer extends StatelessWidget {
               final selected = index == selectedIndex;
 
               return ListTile(
-                leading: Icon(destination.icon,
-                    color: selected
-                        ? theme.colorScheme.primary
-                        : theme.colorScheme.onSurfaceVariant),
+                leading: Icon(
+                  destination.icon,
+                  color:
+                      selected
+                          ? theme.colorScheme.primary
+                          : theme.colorScheme.onSurfaceVariant,
+                ),
                 title: Text(destination.label),
                 selected: selected,
                 onTap: () {

@@ -1,4 +1,5 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_riverpod/legacy.dart';
 
 import '../../../models/order.dart';
 import '../../../providers/service_providers.dart';
@@ -30,5 +31,5 @@ class OrdersController extends StateNotifier<AsyncValue<List<OrderItem>>> {
 
 final ordersControllerProvider =
     StateNotifierProvider<OrdersController, AsyncValue<List<OrderItem>>>((ref) {
-  return OrdersController(ref);
-});
+      return OrdersController(ref);
+    });

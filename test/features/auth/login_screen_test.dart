@@ -7,8 +7,7 @@ import 'package:appydex_vendor/src/features/auth/models/auth_state.dart';
 import 'package:appydex_vendor/src/features/auth/screens/login_screen.dart';
 
 class _FakeAuthController extends AuthController {
-  _FakeAuthController(Ref ref)
-      : super(ref) {
+  _FakeAuthController(super.ref) {
     state = const AuthState(status: AuthStatus.unauthenticated);
   }
 
@@ -20,7 +19,11 @@ class _FakeAuthController extends AuthController {
   @override
   Future<void> requestOtp(String phone) async {
     lastPhone = phone;
-    state = state.copyWith(status: AuthStatus.otpRequested, phone: phone, isLoading: false);
+    state = state.copyWith(
+      status: AuthStatus.otpRequested,
+      phone: phone,
+      isLoading: false,
+    );
   }
 }
 

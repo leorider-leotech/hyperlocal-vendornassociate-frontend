@@ -1,13 +1,11 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_riverpod/legacy.dart';
 
 import '../../../models/lead.dart';
 import '../../../providers/service_providers.dart';
 
 class LeadsState {
-  const LeadsState({
-    required this.status,
-    required this.leads,
-  });
+  const LeadsState({required this.status, required this.leads});
 
   final String status;
   final AsyncValue<List<LeadItem>> leads;
@@ -22,7 +20,7 @@ class LeadsState {
 
 class LeadsController extends StateNotifier<LeadsState> {
   LeadsController(this._ref)
-      : super(LeadsState(status: 'new', leads: const AsyncValue.loading())) {
+    : super(LeadsState(status: 'new', leads: const AsyncValue.loading())) {
     load();
   }
 
@@ -52,4 +50,6 @@ class LeadsController extends StateNotifier<LeadsState> {
 }
 
 final leadsControllerProvider =
-    StateNotifierProvider<LeadsController, LeadsState>((ref) => LeadsController(ref));
+    StateNotifierProvider<LeadsController, LeadsState>(
+      (ref) => LeadsController(ref),
+    );

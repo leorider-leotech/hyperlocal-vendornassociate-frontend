@@ -1,4 +1,5 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_riverpod/legacy.dart';
 
 import '../../../models/service.dart';
 import '../../../providers/service_providers.dart';
@@ -23,6 +24,8 @@ class ServicesController extends StateNotifier<AsyncValue<List<ServiceItem>>> {
 }
 
 final servicesControllerProvider =
-    StateNotifierProvider<ServicesController, AsyncValue<List<ServiceItem>>>((ref) {
-  return ServicesController(ref);
-});
+    StateNotifierProvider<ServicesController, AsyncValue<List<ServiceItem>>>((
+      ref,
+    ) {
+      return ServicesController(ref);
+    });

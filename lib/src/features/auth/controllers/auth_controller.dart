@@ -1,4 +1,5 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_riverpod/legacy.dart';
 
 import '../../../models/auth_tokens.dart';
 import '../../../providers/service_providers.dart';
@@ -7,8 +8,7 @@ import '../../../services/auth_service.dart';
 import '../models/auth_state.dart';
 
 class AuthController extends StateNotifier<AuthState> {
-  AuthController(this._ref)
-      : super(AuthState.initial()) {
+  AuthController(this._ref) : super(AuthState.initial()) {
     Future.microtask(initialize);
   }
 
@@ -23,7 +23,10 @@ class AuthController extends StateNotifier<AuthState> {
     if (tokens?.isValid == true) {
       await _restoreSession();
     } else {
-      state = state.copyWith(status: AuthStatus.unauthenticated, resetError: true);
+      state = state.copyWith(
+        status: AuthStatus.unauthenticated,
+        resetError: true,
+      );
     }
   }
 
@@ -85,7 +88,11 @@ class AuthController extends StateNotifier<AuthState> {
       );
     } catch (_) {
       await _apiService.clearTokens();
-      state = state.copyWith(status: AuthStatus.unauthenticated, isLoading: false, resetError: true);
+      state = state.copyWith(
+        status: AuthStatus.unauthenticated,
+        isLoading: false,
+        resetError: true,
+      );
     }
   }
 
@@ -101,6 +108,8 @@ class AuthController extends StateNotifier<AuthState> {
   }
 }
 
-final authControllerProvider = StateNotifierProvider<AuthController, AuthState>((ref) {
-  return AuthController(ref);
-});
+final authControllerProvider = StateNotifierProvider<AuthController, AuthState>(
+  (ref) {
+    return AuthController(ref);
+  },
+);
