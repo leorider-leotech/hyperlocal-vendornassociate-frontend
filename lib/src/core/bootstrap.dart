@@ -13,28 +13,23 @@ Future<void> bootstrap() async {
   final container = ProviderContainer(overrides: globalProviderOverrides);
   FlutterError.onError = (details) {
     FlutterError.presentError(details);
-    Zone.current.handleUncaughtError(details.exception, details.stack ?? StackTrace.current);
+    Zone.current.handleUncaughtError(
+      details.exception,
+      details.stack ?? StackTrace.current,
+    );
   };
 
   final dsn = dotenv.maybeGet('SENTRY_DSN');
   Future<void> runWithContainer() async {
-    runApp(
-      UncontrolledProviderScope(
-        container: container,
-        child: const App(),
-      ),
-    );
+    runApp(UncontrolledProviderScope(container: container, child: const App()));
   }
 
   if (dsn != null && dsn.isNotEmpty) {
-    await SentryFlutter.init(
-      (options) {
-        options.dsn = dsn;
-        options.tracesSampleRate = 0.1;
-        options.enableAutoSessionTracking = true;
-      },
-      appRunner: runWithContainer,
-    );
+    await SentryFlutter.init((options) {
+      options.dsn = dsn;
+      options.tracesSampleRate = 0.1;
+      options.enableAutoSessionTracking = true;
+    }, appRunner: runWithContainer);
   } else {
     await runWithContainer();
   }

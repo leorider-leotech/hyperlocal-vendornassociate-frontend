@@ -18,10 +18,16 @@ class OrderItem {
       id: json['id'] as String? ?? '',
       status: json['status'] as String? ?? 'pending',
       total: (json['total'] is num) ? (json['total'] as num).toDouble() : 0,
-      customerName: json['customer_name'] as String? ?? json['customerName'] as String? ?? 'Customer',
-      updatedAt: json['updated_at'] != null
-          ? DateTime.tryParse(json['updated_at'] as String)
-          : (json['updatedAt'] != null ? DateTime.tryParse(json['updatedAt'] as String) : null),
+      customerName:
+          json['customer_name'] as String? ??
+          json['customerName'] as String? ??
+          'Customer',
+      updatedAt:
+          json['updated_at'] != null
+              ? DateTime.tryParse(json['updated_at'] as String)
+              : (json['updatedAt'] != null
+                  ? DateTime.tryParse(json['updatedAt'] as String)
+                  : null),
     );
   }
 }

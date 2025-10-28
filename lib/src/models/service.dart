@@ -27,10 +27,10 @@ class ServiceItem {
   }
 
   Map<String, dynamic> toJson() => {
-        'name': name,
-        'category': category,
-        'price': price,
-        'status': status,
-        if (imageUrl != null) 'image_url': imageUrl,
-      };
+    'name': name,
+    'category': category,
+    'price': price,
+    'status': status,
+    if (imageUrl != null) 'image_url': imageUrl,
+  };
 }

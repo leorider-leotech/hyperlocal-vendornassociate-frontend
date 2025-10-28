@@ -11,7 +11,9 @@ import 'screens/splash_screen.dart';
 import 'utils/go_router_refresh.dart';
 
 final appRouterProvider = Provider<GoRouter>((ref) {
-  final refresh = GoRouterRefresh(ref.read(authControllerProvider.notifier).stream);
+  final refresh = GoRouterRefresh(
+    ref.read(authControllerProvider.notifier).stream,
+  );
   ref.onDispose(refresh.dispose);
   ref.watch(authControllerProvider);
   return GoRouter(
@@ -41,18 +43,9 @@ final appRouterProvider = Provider<GoRouter>((ref) {
       return null;
     },
     routes: [
-      GoRoute(
-        path: '/',
-        builder: (context, state) => const SplashScreen(),
-      ),
-      GoRoute(
-        path: '/login',
-        builder: (context, state) => const LoginScreen(),
-      ),
-      GoRoute(
-        path: '/otp',
-        builder: (context, state) => const OtpScreen(),
-      ),
+      GoRoute(path: '/', builder: (context, state) => const SplashScreen()),
+      GoRoute(path: '/login', builder: (context, state) => const LoginScreen()),
+      GoRoute(path: '/otp', builder: (context, state) => const OtpScreen()),
       GoRoute(
         path: '/dashboard',
         builder: (context, state) => const DashboardShell(),

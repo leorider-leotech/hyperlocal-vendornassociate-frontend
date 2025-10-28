@@ -14,7 +14,7 @@ class OrdersScreen extends ConsumerWidget {
     return state.when(
       data: (orders) {
         if (orders.isEmpty) {
-          return const Center(child: Text('No orders yet.')); 
+          return const Center(child: Text('No orders yet.'));
         }
         final format = NumberFormat.simpleCurrency(name: 'INR');
         final dateFormat = DateFormat('dd MMM, hh:mm a');
@@ -38,12 +38,23 @@ class OrdersScreen extends ConsumerWidget {
                     const SizedBox(height: 8),
                     Text(format.format(order.total)),
                     PopupMenuButton<String>(
-                      onSelected: (value) => controller.updateOrder(order.id, value),
-                      itemBuilder: (context) => const [
-                        PopupMenuItem(value: 'in_progress', child: Text('Mark In Progress')),
-                        PopupMenuItem(value: 'completed', child: Text('Mark Completed')),
-                        PopupMenuItem(value: 'cancelled', child: Text('Cancel Order')),
-                      ],
+                      onSelected:
+                          (value) => controller.updateOrder(order.id, value),
+                      itemBuilder:
+                          (context) => const [
+                            PopupMenuItem(
+                              value: 'in_progress',
+                              child: Text('Mark In Progress'),
+                            ),
+                            PopupMenuItem(
+                              value: 'completed',
+                              child: Text('Mark Completed'),
+                            ),
+                            PopupMenuItem(
+                              value: 'cancelled',
+                              child: Text('Cancel Order'),
+                            ),
+                          ],
                     ),
                   ],
                 ),
@@ -53,18 +64,25 @@ class OrdersScreen extends ConsumerWidget {
         );
       },
       loading: () => const Center(child: CircularProgressIndicator()),
-      error: (error, _) => Center(
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Text('Failed to load orders', style: Theme.of(context).textTheme.titleMedium),
-            const SizedBox(height: 8),
-            Text(error.toString()),
-            const SizedBox(height: 16),
-            FilledButton(onPressed: controller.load, child: const Text('Retry')),
-          ],
-        ),
-      ),
+      error:
+          (error, _) => Center(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Text(
+                  'Failed to load orders',
+                  style: Theme.of(context).textTheme.titleMedium,
+                ),
+                const SizedBox(height: 8),
+                Text(error.toString()),
+                const SizedBox(height: 16),
+                FilledButton(
+                  onPressed: controller.load,
+                  child: const Text('Retry'),
+                ),
+              ],
+            ),
+          ),
     );
   }
 }

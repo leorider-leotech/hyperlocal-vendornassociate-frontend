@@ -24,19 +24,20 @@ class Vendor {
       name: json['name'] as String? ?? '',
       email: json['email'] as String? ?? '',
       phone: json['phone'] as String? ?? '',
-      subscription: json['subscription'] != null
-          ? Subscription.fromJson(json['subscription'] as Map<String, dynamic>)
-          : null,
-      stats: json['stats'] != null
-          ? VendorStats.fromJson(json['stats'] as Map<String, dynamic>)
-          : null,
+      subscription:
+          json['subscription'] != null
+              ? Subscription.fromJson(
+                json['subscription'] as Map<String, dynamic>,
+              )
+              : null,
+      stats:
+          json['stats'] != null
+              ? VendorStats.fromJson(json['stats'] as Map<String, dynamic>)
+              : null,
     );
   }
 
-  Vendor copyWith({
-    Subscription? subscription,
-    VendorStats? stats,
-  }) {
+  Vendor copyWith({Subscription? subscription, VendorStats? stats}) {
     return Vendor(
       id: id,
       name: name,

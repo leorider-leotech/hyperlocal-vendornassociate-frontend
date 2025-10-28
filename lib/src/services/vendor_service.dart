@@ -12,7 +12,10 @@ class VendorService {
     final response = await _api.get<List<dynamic>>('/vendors/services');
     final data = response.data ?? [];
     return data
-        .map((item) => ServiceItem.fromJson(Map<String, dynamic>.from(item as Map)))
+        .map(
+          (item) =>
+              ServiceItem.fromJson(Map<String, dynamic>.from(item as Map)),
+        )
         .toList();
   }
 
@@ -43,22 +46,23 @@ class VendorService {
     );
     final data = response.data ?? [];
     return data
-        .map((item) => LeadItem.fromJson(Map<String, dynamic>.from(item as Map)))
+        .map(
+          (item) => LeadItem.fromJson(Map<String, dynamic>.from(item as Map)),
+        )
         .toList();
   }
 
   Future<void> updateLeadStatus(String id, String status) async {
-    await _api.put<void>(
-      '/vendors/leads/$id/status',
-      data: {'status': status},
-    );
+    await _api.put<void>('/vendors/leads/$id/status', data: {'status': status});
   }
 
   Future<List<OrderItem>> fetchOrders() async {
     final response = await _api.get<List<dynamic>>('/vendors/orders');
     final data = response.data ?? [];
     return data
-        .map((item) => OrderItem.fromJson(Map<String, dynamic>.from(item as Map)))
+        .map(
+          (item) => OrderItem.fromJson(Map<String, dynamic>.from(item as Map)),
+        )
         .toList();
   }
 
